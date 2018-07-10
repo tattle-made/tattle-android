@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OnboardingActivity">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/hexa_margin"
+            android:layout_height="@dimen/hexa_margin"
+            android:background="@color/primaryColor" />
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Naarad"
+            android:textSize="@dimen/double_margin"
+            android:layout_marginLeft="@dimen/double_margin"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/primaryColor" />
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send content you receive on whatsapp to us. Help us create the biggest open API to study thriving content ecosystem on Whatsapp."
+            android:textSize="@dimen/double_margin"
+            android:layout_marginLeft="@dimen/double_margin"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/privacy_policy"
+            android:text="PRIVACY POLICY"
+            android:textSize="@dimen/double_margin"
+            android:layout_marginLeft="@dimen/double_margin"
+            android:layout_gravity="center"
+            android:textStyle=""/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center">
+
+        <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_using"
+            android:text="Start using"/>
+
+    </LinearLayout>
+
+</LinearLayout>
