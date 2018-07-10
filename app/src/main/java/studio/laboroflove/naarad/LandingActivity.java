@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,8 @@ public class LandingActivity extends AppCompatActivity {
     EditText formTags;
     @BindView(R.id.form_location)
     CheckBox formLocation;
+    @BindView(R.id.image_preview)
+    ImageView imagePreview;
 
     private enum PostState{
         text,
@@ -117,11 +120,19 @@ public class LandingActivity extends AppCompatActivity {
             if(type.startsWith("image/")){
                 postState = PostState.image;
                 currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                showOnlyImagePreview();
             }else if(type.startsWith("video/")){
                 postState = PostState.video;
                 currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
             }
         }
+    }
+
+    private void showOnlyImagePreview() {
+        imagePreview.setImageURI(currentFileUri);
+        imagePreview.setVisibility(View.VISIBLE);
+        clipboardPreview.setVisibility(GONE);
+        compoundWidget.setVisibility(GONE);
     }
 
     public void uploadTextFile(){
@@ -228,6 +239,8 @@ public class LandingActivity extends AppCompatActivity {
         clipboardPreview.setText("");
         clipboardPreview.setVisibility(GONE);
         compoundWidget.setVisibility(View.VISIBLE);
+        imagePreview.setVisibility(GONE);
+        imagePreview.setImageURI(null);
     }
 
     public static void startMe(OnboardingActivity onboardingActivity){

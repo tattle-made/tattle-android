@@ -1,77 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/quadruple_margin"
-    android:paddingRight="@dimen/quadruple_margin"
     android:animateLayoutChanges="true"
     tools:context=".LandingActivity">
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/quadruple_margin"
-        android:padding="@dimen/quadruple_margin"
-        android:background="@color/primaryLightColorTranscluscent">
 
-        <TextView android:layout_height="50dp"
-            android:layout_width="match_parent"
-            android:id="@+id/clipboard_preview"
-            android:ellipsize="end"
-            android:visibility="gone"
-            android:text="dummy"/>
 
-        <LinearLayout android:layout_width="match_parent"
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/quadruple_margin"
+        android:paddingRight="@dimen/quadruple_margin"
+        >
+        <FrameLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/compound_upload_widget"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/quadruple_margin"
+            android:padding="@dimen/quadruple_margin"
+            android:background="@color/primaryLightColorTranscluscent">
 
-            <Button android:layout_width="match_parent"
+            <TextView android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:id="@+id/clipboard_preview"
+                android:ellipsize="end"
+                android:visibility="gone"
+                android:text="dummy"/>
+
+            <ImageView android:layout_height="250dp"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:id="@+id/image_preview"
+                android:ellipsize="end"
+                android:visibility="gone"/>
+
+            <LinearLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/paste_clipboard"
-                android:text="Paste text from clipboard"/>
+                android:id="@+id/compound_upload_widget"
+                android:orientation="vertical">
 
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="or"
-                android:layout_gravity="center_horizontal"/>
+                <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/paste_clipboard"
+                    android:text="Paste text from clipboard"/>
 
-            <Button android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/upload_media"
-                android:text="Upload video or Image"/>
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="or"
+                    android:layout_gravity="center_horizontal"/>
 
-        </LinearLayout>
-    </FrameLayout>
+                <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/upload_media"
+                    android:text="Upload video or Image"/>
 
-    <EditText android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/form_title"
-        android:hint="Title"/>
+            </LinearLayout>
+        </FrameLayout>
 
-    <EditText android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/form_description"
-        android:lines="4"
-        android:gravity="top"
-        android:hint="Description"/>
+        <EditText android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/form_title"
+            android:layout_marginTop="@dimen/single_margin"
+            android:hint="Title"/>
 
-    <EditText android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/form_tags"
-        android:hint="Tags"/>
+        <EditText android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/form_description"
+            android:layout_marginTop="@dimen/single_margin"
+            android:lines="4"
+            android:gravity="top"
+            android:hint="Description"/>
 
-    <CheckBox android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/form_location"
-        android:hint="Send Location"/>
+        <EditText android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            android:id="@+id/form_tags"
+            android:hint="Tags"/>
 
-    <Button android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/submit_button"
-        android:text="Submit Post"/>
+        <CheckBox android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            android:id="@+id/form_location"
+            android:hint="Send Location"/>
+
+        <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            android:layout_marginBottom="@dimen/single_margin"
+            android:id="@+id/submit_button"
+            android:text="Submit Post"/>
+    </LinearLayout>
 
 
-</LinearLayout>
+</ScrollView>
