@@ -2,14 +2,18 @@ package studio.laboroflove.naarad;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -36,6 +40,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import studio.laboroflove.naarad.widgets.LoaderButton;
 
 import static android.view.View.GONE;
 
@@ -46,15 +51,17 @@ public class LandingActivity extends AppCompatActivity {
     @BindView(R.id.compound_upload_widget) LinearLayout compoundWidget;
 
     @BindView(R.id.form_title)
-    EditText formTitle;
+    TextInputEditText formTitle;
     @BindView(R.id.form_description)
-    EditText formDescription;
+    TextInputEditText formDescription;
     @BindView(R.id.form_tags)
-    EditText formTags;
+    TextInputEditText formTags;
     @BindView(R.id.form_location)
     CheckBox formLocation;
     @BindView(R.id.image_preview)
     ImageView imagePreview;
+    @BindView(R.id.compound_submit_button)
+    LoaderButton compoundSubmitButton;
 
     private enum PostState{
         text,
@@ -80,21 +87,6 @@ public class LandingActivity extends AppCompatActivity {
         clipboardPreview.setText(clipboardText);
 
         postState = PostState.text;
-    }
-    @OnClick(R.id.submit_button)
-    public void submitPost(View v){
-
-        switch (postState){
-            case text:
-                uploadTextFile();
-                break;
-            case image:
-                uploadImageFile(currentFileUri);
-                break;
-            case video:
-                uploadVideoFile(currentFileUri);
-                break;
-        }
     }
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -126,6 +118,22 @@ public class LandingActivity extends AppCompatActivity {
                 currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
             }
         }
+        compoundSubmitButton.setInteractionListener(new LoaderButton.InteractionListener() {
+            @Override
+            public void onClicked() {
+                switch (postState){
+                    case text:
+                        uploadTextFile();
+                        break;
+                    case image:
+                        uploadImageFile(currentFileUri);
+                        break;
+                    case video:
+                        uploadVideoFile(currentFileUri);
+                        break;
+                }
+            }
+        });
     }
 
     private void showOnlyImagePreview() {
@@ -219,6 +227,7 @@ public class LandingActivity extends AppCompatActivity {
                 public void onSuccess(DocumentReference documentReference) {
                     Log.d(TAG, "success uploading post");
                     Toast.makeText(getBaseContext(), "Post Saved. Thank you!", Toast.LENGTH_SHORT).show();
+                    compoundSubmitButton.onComplete();
                     clearSlate();
                 }
             })

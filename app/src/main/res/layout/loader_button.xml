@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/button"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:clickable="true"
+    android:paddingRight="@dimen/quadruple_margin"
+    android:paddingLeft="@dimen/quadruple_margin"
+    android:paddingTop="@dimen/double_margin"
+    android:paddingBottom="@dimen/double_margin"
+    android:background="@drawable/button_simple"
+    android:elevation="@dimen/half_margin"
+    android:animateLayoutChanges="true">
+
+    <ProgressBar
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:indeterminate="true"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        android:progressTint="@color/primaryColor"
+        android:indeterminateTint="@color/primaryColor"
+        android:layout_marginRight="@dimen/double_margin"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_label"
+        android:text="Submit"/>
+
+</LinearLayout>

@@ -8,28 +8,27 @@
     android:animateLayoutChanges="true"
     tools:context=".LandingActivity">
 
-
-
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingLeft="@dimen/quadruple_margin"
         android:paddingRight="@dimen/quadruple_margin"
+        android:paddingTop="@dimen/quadruple_margin"
+        android:paddingBottom="@dimen/quadruple_margin"
         >
         <FrameLayout android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/quadruple_margin"
             android:padding="@dimen/quadruple_margin"
             android:background="@color/primaryLightColorTranscluscent">
 
-            <TextView android:layout_height="50dp"
+            <TextView android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/clipboard_preview"
                 android:ellipsize="end"
                 android:visibility="gone"
                 android:text="dummy"/>
 
-            <ImageView android:layout_height="250dp"
+            <ImageView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
@@ -60,25 +59,44 @@
             </LinearLayout>
         </FrameLayout>
 
-        <EditText android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/form_title"
             android:layout_marginTop="@dimen/single_margin"
-            android:hint="Title"/>
+            android:hint="Title">
 
-        <EditText android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/form_description"
-            android:layout_marginTop="@dimen/single_margin"
-            android:lines="4"
-            android:gravity="top"
-            android:hint="Description"/>
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/form_title"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/single_margin"
-            android:id="@+id/form_tags"
-            android:hint="Tags"/>
+            android:hint="Description">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/form_description"
+                android:gravity="top"
+                android:lines="4"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_margin"
+            android:hint="Tags">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/form_tags"/>
+        </android.support.design.widget.TextInputLayout>
 
         <CheckBox android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,12 +104,16 @@
             android:id="@+id/form_location"
             android:hint="Send Location"/>
 
-        <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+
+        <studio.laboroflove.naarad.widgets.LoaderButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/single_margin"
-            android:layout_marginBottom="@dimen/single_margin"
-            android:id="@+id/submit_button"
-            android:text="Submit Post"/>
+            android:id="@+id/compound_submit_button">
+
+        </studio.laboroflove.naarad.widgets.LoaderButton>
+
+
     </LinearLayout>
 
 
