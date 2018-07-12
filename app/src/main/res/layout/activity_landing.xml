@@ -68,13 +68,18 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/form_title"/>
+                android:id="@+id/form_title"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/single_margin"
+            app:counterEnabled="true"
+            app:counterMaxLength="150"
             android:hint="Description">
 
             <android.support.design.widget.TextInputEditText
@@ -82,7 +87,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/form_description"
                 android:gravity="top"
-                android:lines="4"/>
+                android:lines="4"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -95,7 +103,10 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/form_tags"/>
+                android:id="@+id/form_tags"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <CheckBox android:layout_width="match_parent"
