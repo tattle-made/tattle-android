@@ -121,6 +121,7 @@ public class LandingActivity extends AppCompatActivity {
         compoundSubmitButton.setInteractionListener(new LoaderButton.InteractionListener() {
             @Override
             public void onClicked() {
+                Log.d(TAG, formDescription.getText().toString());
                 switch (postState){
                     case text:
                         uploadTextFile();
