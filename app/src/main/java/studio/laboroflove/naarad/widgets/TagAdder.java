@@ -26,15 +26,13 @@ public class TagAdder extends LinearLayout {
 
     @BindView(R.id.rv_tags) RecyclerView rvTags;
     @BindView(R.id.edittext_tag) EditText editTextTag;
+    private TagAdapter tagAdapter;
 
     @OnClick(R.id.btn_add)
     public void addClicked(View v){
-        tags.add(editTextTag.getText().toString());
+        tagAdapter.getTags().add(0, editTextTag.getText().toString());
+        tagAdapter.notifyDataSetChanged();
         editTextTag.setText("");
-        Log.d(TAG, "tags : ");
-        for(String tag:tags){
-            Log.d(TAG, tag);
-        }
     }
 
     public TagAdder(Context context) {
@@ -56,11 +54,11 @@ public class TagAdder extends LinearLayout {
         ButterKnife.bind(inflate(context, R.layout.tag_adder, this), this);
 
         rvTags.setHasFixedSize(true);
-        //LessonsLayoutManager layoutManager = new LessonsLayoutManager();
-        tags.add("one"); tags.add("two"); tags.add("three"); tags.add("four");
-        TagAdapter adapter = new TagAdapter(tags);
-        rvTags.setAdapter(adapter);
-        rvTags.setLayoutManager(new LinearLayoutManager(getContext()));
-
+//        tags.add("one"); tags.add("two"); tags.add("three"); tags.add("four");
+//        tags.add("twenty one"); tags.add("nine"); tags.add("who"); tags.add("93781");
+        tagAdapter = new TagAdapter(tags);
+        rvTags.setAdapter(tagAdapter);
+        rvTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        //rvTags.setLayoutManager(layoutManager);
     }
 }

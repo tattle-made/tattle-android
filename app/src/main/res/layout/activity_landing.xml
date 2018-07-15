@@ -65,6 +65,13 @@
             android:paddingTop="@dimen/quadruple_margin"
             android:paddingBottom="@dimen/quadruple_margin">
 
+            <studio.laboroflove.naarad.widgets.TagAdder
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tagadder_tags">
+
+            </studio.laboroflove.naarad.widgets.TagAdder>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,13 +121,6 @@
                     android:inputType="textCapWords"
                     android:singleLine="true"/>
             </android.support.design.widget.TextInputLayout>
-
-            <studio.laboroflove.naarad.widgets.TagAdder
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tagadder_tags">
-
-            </studio.laboroflove.naarad.widgets.TagAdder>
 
             <CheckBox android:layout_width="match_parent"
                 android:layout_height="wrap_content"

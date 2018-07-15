@@ -32,10 +32,17 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         if(viewHolder.getTagText()!=null){
             viewHolder.getTagText().setText(tags.get(i));
         }
+        viewHolder.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tags.remove(tags.get(i));
+                notifyItemChanged(i);
+            }
+        });
     }
 
     @Override
@@ -45,14 +52,23 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.tag_text) TextView tagText;
+        @BindView(R.id.tag_root) LinearLayout root;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull LinearLayout itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         public TextView getTagText() {
             return tagText;
         }
+
+        public LinearLayout getRoot() {
+            return root;
+        }
+    }
+
+    public List<String> getTags() {
+        return tags;
     }
 }

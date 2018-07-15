@@ -9,8 +9,13 @@
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
 
+    <color name="gray">#BBBBBB</color>
+
     <color name="colorPrimary">@color/primaryColor</color>
     <color name="colorPrimaryDark">@color/primaryColor</color>
     <color name="colorAccent">@color/secondaryColor</color>
     <color name="primaryLightColorTranscluscent">@color/primaryDarkColor</color>
+    <color name="black">@color/primaryTextColor</color>
+
+    <color name="primaryColorA1">#9CEF8C</color>
 </resources>
