@@ -41,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import studio.laboroflove.naarad.widgets.LoaderButton;
+import studio.laboroflove.naarad.widgets.TagAdder;
 
 import static android.view.View.GONE;
 
@@ -54,8 +55,8 @@ public class LandingActivity extends AppCompatActivity {
     TextInputEditText formTitle;
     @BindView(R.id.form_description)
     TextInputEditText formDescription;
-    @BindView(R.id.form_tags)
-    TextInputEditText formTags;
+    @BindView(R.id.tagadder_tags)
+    TagAdder tagAdder;
     @BindView(R.id.form_location)
     CheckBox formLocation;
     @BindView(R.id.image_preview)
@@ -213,11 +214,8 @@ public class LandingActivity extends AppCompatActivity {
         Map<String, Object> post = new HashMap<>();
         post.put("title", formTitle.getText().toString());
         post.put("description", formDescription.getText().toString());
-        List<String> tags = new ArrayList<>();
-        for(String tag : formTags.getText().toString().split(",")){
-            tags.add(tag);
-        }
-        post.put("tags", tags);
+
+        post.put("tags", tagAdder.getTags());
         post.put("type", "text");
         post.put("filename", filename);
 
@@ -244,7 +242,7 @@ public class LandingActivity extends AppCompatActivity {
     private void clearSlate(){
         formTitle.setText("");
         formDescription.setText("");
-        formTags.setText("");
+        tagAdder.clearTags();
         formLocation.setChecked(false);
         clipboardPreview.setText("");
         clipboardPreview.setVisibility(GONE);

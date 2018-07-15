@@ -65,13 +65,6 @@
             android:paddingTop="@dimen/quadruple_margin"
             android:paddingBottom="@dimen/quadruple_margin">
 
-            <studio.laboroflove.naarad.widgets.TagAdder
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tagadder_tags">
-
-            </studio.laboroflove.naarad.widgets.TagAdder>
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,21 +99,12 @@
                     android:maxLines="1"/>
             </android.support.design.widget.TextInputLayout>
 
-
-            <android.support.design.widget.TextInputLayout
+            <studio.laboroflove.naarad.widgets.TagAdder
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/single_margin"
-                android:hint="Tags">
+                android:id="@+id/tagadder_tags">
 
-                <android.support.design.widget.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/form_tags"
-                    android:imeOptions="actionNext"
-                    android:inputType="textCapWords"
-                    android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
+            </studio.laboroflove.naarad.widgets.TagAdder>
 
             <CheckBox android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,7 +116,7 @@
             <studio.laboroflove.naarad.widgets.LoaderButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/single_margin"
+                android:layout_marginTop="@dimen/double_margin"
                 android:id="@+id/compound_submit_button">
 
             </studio.laboroflove.naarad.widgets.LoaderButton>

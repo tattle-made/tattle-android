@@ -22,7 +22,6 @@ import studio.laboroflove.naarad.R;
 
 public class TagAdder extends LinearLayout {
     private final String TAG = TagAdder.class.getSimpleName();
-    private List<String> tags = new ArrayList<>();
 
     @BindView(R.id.rv_tags) RecyclerView rvTags;
     @BindView(R.id.edittext_tag) EditText editTextTag;
@@ -56,9 +55,19 @@ public class TagAdder extends LinearLayout {
         rvTags.setHasFixedSize(true);
 //        tags.add("one"); tags.add("two"); tags.add("three"); tags.add("four");
 //        tags.add("twenty one"); tags.add("nine"); tags.add("who"); tags.add("93781");
-        tagAdapter = new TagAdapter(tags);
+        tagAdapter = new TagAdapter();
         rvTags.setAdapter(tagAdapter);
         rvTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         //rvTags.setLayoutManager(layoutManager);
     }
+
+    public List<String> getTags(){
+        return tagAdapter.getTags();
+    }
+
+    public void clearTags(){
+        tagAdapter.getTags().clear();
+        tagAdapter.notifyDataSetChanged();
+    }
+
 }

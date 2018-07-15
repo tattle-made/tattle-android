@@ -18,8 +18,8 @@ import studio.laboroflove.naarad.R;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     private List<String> tags = new ArrayList<>();
 
-    public TagAdapter(List<String> tags) {
-        this.tags = tags;
+    public TagAdapter() {
+
     }
 
     @NonNull
