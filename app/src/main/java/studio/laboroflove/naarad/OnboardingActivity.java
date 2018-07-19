@@ -32,7 +32,7 @@ public class OnboardingActivity extends AppCompatActivity {
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-
+        LandingActivity.startMe(OnboardingActivity.this);
     }
 
     @Override

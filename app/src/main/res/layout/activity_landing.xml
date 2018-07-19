@@ -40,6 +40,8 @@
                 <Button android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/paste_clipboard"
+                    android:background="@color/primaryTextColor"
+                    android:textColor="@color/secondaryTextColor"
                     android:text="Paste text from clipboard"/>
 
                 <TextView android:layout_width="wrap_content"

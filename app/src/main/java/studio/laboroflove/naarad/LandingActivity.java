@@ -1,14 +1,20 @@
 package studio.laboroflove.naarad;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -21,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,16 +47,20 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import studio.laboroflove.LocationUtil;
 import studio.laboroflove.naarad.widgets.LoaderButton;
 import studio.laboroflove.naarad.widgets.TagAdder;
 
 import static android.view.View.GONE;
 
-public class LandingActivity extends AppCompatActivity {
+public class LandingActivity extends AppCompatActivity
+        implements LocationUtil.LocationAvailabilityListener {
     private final String TAG = LandingActivity.class.getSimpleName();
 
-    @BindView(R.id.clipboard_preview) TextView clipboardPreview;
-    @BindView(R.id.compound_upload_widget) LinearLayout compoundWidget;
+    @BindView(R.id.clipboard_preview)
+    TextView clipboardPreview;
+    @BindView(R.id.compound_upload_widget)
+    LinearLayout compoundWidget;
 
     @BindView(R.id.form_title)
     TextInputEditText formTitle;
@@ -64,7 +75,7 @@ public class LandingActivity extends AppCompatActivity {
     @BindView(R.id.compound_submit_button)
     LoaderButton compoundSubmitButton;
 
-    private enum PostState{
+    private enum PostState {
         text,
         video,
         image
@@ -73,14 +84,20 @@ public class LandingActivity extends AppCompatActivity {
     private PostState postState;
     private Uri currentFileUri;
 
+    private LocationUtil locationUtil;
+    private Location lastKnownLocation;
+
+    private LocationManager locationManager;
+
     @OnClick(R.id.upload_media)
-    public void onClickUploadMedia(View v){
+    public void onClickUploadMedia(View v) {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/* video/*");
         startActivityForResult(galleryIntent, PICK_IMAGE);
     }
+
     @OnClick(R.id.paste_clipboard)
-    public void onPasteClipboard(View v){
+    public void onPasteClipboard(View v) {
         compoundWidget.setVisibility(GONE);
         clipboardPreview.setVisibility(View.VISIBLE);
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -109,12 +126,12 @@ public class LandingActivity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
-        if(Intent.ACTION_SEND.equals(action) && type!=null){
-            if(type.startsWith("image/")){
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
                 postState = PostState.image;
                 currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 showOnlyImagePreview();
-            }else if(type.startsWith("video/")){
+            } else if (type.startsWith("video/")) {
                 postState = PostState.video;
                 currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
             }
@@ -123,19 +140,63 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClicked() {
                 Log.d(TAG, formDescription.getText().toString());
-                switch (postState){
-                    case text:
-                        uploadTextFile();
-                        break;
-                    case image:
-                        uploadImageFile(currentFileUri);
-                        break;
-                    case video:
-                        uploadVideoFile(currentFileUri);
-                        break;
+//                switch (postState){
+//                    case text:
+//                        uploadTextFile();
+//                        break;
+//                    case image:
+//                        uploadImageFile(currentFileUri);
+//                        break;
+//                    case video:
+//                        uploadVideoFile(currentFileUri);
+//                        break;
+//                }
+                if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    String locationProvider = LocationManager.NETWORK_PROVIDER;
+                    Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                    Log.d(TAG, "get lat : "+lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
+                    return;
                 }
             }
         });
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                onLocationChanged(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+
+        if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+            return;
+        }
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        locationUtil = LocationUtil.getInstance(getBaseContext(), this);
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        locationUtil.startLocationUpdates(getBaseContext());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationUtil.stopLocationUpdates();
     }
 
     private void showOnlyImagePreview() {
@@ -271,5 +332,16 @@ public class LandingActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onLocationAvailable(boolean isAvailable) {
+        Log.d("location-test", "is available : "+isAvailable);
+    }
+
+    @Override
+    public void lastKnowLocation(Location location) {
+        lastKnownLocation = location;
+        Log.d("location-test", "last know location : "+location.getLatitude());
     }
 }
