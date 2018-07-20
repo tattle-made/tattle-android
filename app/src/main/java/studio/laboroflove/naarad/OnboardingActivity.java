@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import studio.laboroflove.naarad.utils.FirebaseAuthUtil;
 import studio.laboroflove.naarad.utils.SharedPreferenceUtil;
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -38,6 +40,7 @@ public class OnboardingActivity extends AppCompatActivity {
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }else{
+            loginUserAnonymously();
             SharedPreferenceUtil.getInstance(getBaseContext()).setOnboardingDoneState(true);
             LandingActivity.startMe(OnboardingActivity.this);
         }
@@ -65,6 +68,7 @@ public class OnboardingActivity extends AppCompatActivity {
             case PERMISSION_ALL : {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    loginUserAnonymously();
                     SharedPreferenceUtil.getInstance(getBaseContext()).setOnboardingDoneState(true);
                     LandingActivity.startMe(OnboardingActivity.this);
                 } else {
@@ -72,9 +76,6 @@ public class OnboardingActivity extends AppCompatActivity {
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 
@@ -87,5 +88,19 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    private void loginUserAnonymously(){
+        FirebaseAuthUtil.getInstance().signInAnonymously(new FirebaseAuthUtil.SignInCompletionHandler() {
+            @Override
+            public void onSuccess(String uuid) {
+                SharedPreferenceUtil.getInstance(getBaseContext()).setUserUUID(uuid);
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getBaseContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

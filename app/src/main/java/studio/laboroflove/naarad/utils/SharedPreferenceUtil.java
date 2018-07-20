@@ -10,7 +10,8 @@ public class SharedPreferenceUtil {
     private SharedPreferences sharedPreferences;
 
     private enum PreferenceKeys{
-        onboardingDone
+        onboardingDone,
+        userUUID
     }
 
     public static SharedPreferenceUtil getInstance(Context context){
@@ -33,5 +34,15 @@ public class SharedPreferenceUtil {
 
     public boolean getOnboardingDoneState(){
         return sharedPreferences.getBoolean(PreferenceKeys.onboardingDone.name(), false);
+    }
+
+    public void setUserUUID(String uuid){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PreferenceKeys.userUUID.name(), uuid);
+        editor.commit();
+    }
+
+    public String getUserUUID(){
+        return sharedPreferences.getString(PreferenceKeys.userUUID.name(), "");
     }
 }
