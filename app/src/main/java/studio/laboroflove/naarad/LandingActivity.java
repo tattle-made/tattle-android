@@ -190,13 +190,13 @@ public class LandingActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        locationUtil.startLocationUpdates(getBaseContext());
+        //locationUtil.startLocationUpdates(getBaseContext());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        locationUtil.stopLocationUpdates();
+        //locationUtil.stopLocationUpdates();
     }
 
     private void showOnlyImagePreview() {

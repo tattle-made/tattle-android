@@ -15,6 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import studio.laboroflove.naarad.utils.SharedPreferenceUtil;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -27,12 +28,19 @@ public class OnboardingActivity extends AppCompatActivity {
     @BindView(R.id.privacy_policy)
     TextView privacyPolicy;
 
+    @OnClick(R.id.privacy_policy)
+    public void onClickPrivacyPolicy(View v){
+        PrivacyActivity.startMe(OnboardingActivity.this);
+    }
+
     @OnClick(R.id.start_using)
     public void onStartUsing(View v){
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }else{
+            SharedPreferenceUtil.getInstance(getBaseContext()).setOnboardingDoneState(true);
+            LandingActivity.startMe(OnboardingActivity.this);
         }
-        LandingActivity.startMe(OnboardingActivity.this);
     }
 
     @Override
@@ -43,6 +51,10 @@ public class OnboardingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         privacyPolicy.setPaintFlags(privacyPolicy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        if(SharedPreferenceUtil.getInstance(getBaseContext()).getOnboardingDoneState()){
+            LandingActivity.startMe(this);
+        }
     }
 
     @Override
@@ -53,6 +65,7 @@ public class OnboardingActivity extends AppCompatActivity {
             case PERMISSION_ALL : {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SharedPreferenceUtil.getInstance(getBaseContext()).setOnboardingDoneState(true);
                     LandingActivity.startMe(OnboardingActivity.this);
                 } else {
 
