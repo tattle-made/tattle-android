@@ -48,6 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import studio.laboroflove.LocationUtil;
+import studio.laboroflove.naarad.utils.SimpleLocationUtil;
 import studio.laboroflove.naarad.widgets.LoaderButton;
 import studio.laboroflove.naarad.widgets.TagAdder;
 
@@ -84,10 +85,8 @@ public class LandingActivity extends AppCompatActivity
     private PostState postState;
     private Uri currentFileUri;
 
-    private LocationUtil locationUtil;
-    private Location lastKnownLocation;
-
-    private LocationManager locationManager;
+    //private LocationUtil locationUtil;
+    private SimpleLocationUtil simpleLocationUtil;
 
     @OnClick(R.id.upload_media)
     public void onClickUploadMedia(View v) {
@@ -140,50 +139,26 @@ public class LandingActivity extends AppCompatActivity
             @Override
             public void onClicked() {
                 Log.d(TAG, formDescription.getText().toString());
-//                switch (postState){
-//                    case text:
-//                        uploadTextFile();
-//                        break;
-//                    case image:
-//                        uploadImageFile(currentFileUri);
-//                        break;
-//                    case video:
-//                        uploadVideoFile(currentFileUri);
-//                        break;
-//                }
-                if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    String locationProvider = LocationManager.NETWORK_PROVIDER;
-                    Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                    Log.d(TAG, "get lat : "+lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
-                    return;
+                switch (postState){
+                    case text:
+                        uploadTextFile();
+                        break;
+                    case image:
+                        uploadImageFile(currentFileUri);
+                        break;
+                    case video:
+                        uploadVideoFile(currentFileUri);
+                        break;
                 }
             }
         });
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                onLocationChanged(location);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-
-        if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-            return;
-        }
+        simpleLocationUtil = SimpleLocationUtil.getInstance(getBaseContext());
     }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        locationUtil = LocationUtil.getInstance(getBaseContext(), this);
+        //locationUtil = LocationUtil.getInstance(getBaseContext(), this);
         return super.onCreateView(parent, name, context, attrs);
     }
 
@@ -341,7 +316,6 @@ public class LandingActivity extends AppCompatActivity
 
     @Override
     public void lastKnowLocation(Location location) {
-        lastKnownLocation = location;
         Log.d("location-test", "last know location : "+location.getLatitude());
     }
 }
