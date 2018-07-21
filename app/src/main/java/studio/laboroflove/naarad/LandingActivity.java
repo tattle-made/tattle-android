@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -18,8 +19,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,6 +67,8 @@ public class LandingActivity extends AppCompatActivity{
     CheckBox formLocation;
     @BindView(R.id.image_preview)
     ImageView imagePreview;
+    @BindView(R.id.video_preview)
+    VideoView videoPreview;
     @BindView(R.id.compound_submit_button)
     LoaderButton compoundSubmitButton;
 
@@ -160,6 +165,13 @@ public class LandingActivity extends AppCompatActivity{
         });
 
         simpleLocationUtil = SimpleLocationUtil.getInstance(getBaseContext());
+
+        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setVolume(0,0);
+            }
+        });
     }
 
     @Override
@@ -182,6 +194,17 @@ public class LandingActivity extends AppCompatActivity{
         imagePreview.setVisibility(View.VISIBLE);
         clipboardPreview.setVisibility(GONE);
         compoundWidget.setVisibility(GONE);
+        videoPreview.setVisibility(GONE);
+    }
+
+    private void showOnlyVideoPreview() {
+        videoPreview.setVideoURI(currentFileUri);
+        videoPreview.setVisibility(View.VISIBLE);
+        videoPreview.start();
+
+        clipboardPreview.setVisibility(GONE);
+        compoundWidget.setVisibility(GONE);
+        imagePreview.setVisibility(GONE);
     }
 
     public void uploadTextFile(){
@@ -292,6 +315,8 @@ public class LandingActivity extends AppCompatActivity{
         compoundWidget.setVisibility(View.VISIBLE);
         imagePreview.setVisibility(GONE);
         imagePreview.setImageURI(null);
+        videoPreview.setVideoURI(null);
+        videoPreview.setVisibility(GONE);
     }
 
     public static void startMe(OnboardingActivity onboardingActivity){
@@ -308,8 +333,10 @@ public class LandingActivity extends AppCompatActivity{
                     currentFileUri = data.getData();
                     if(data.getData().toString().contains("image")){
                         postState = PostState.image;
+                        showOnlyImagePreview();
                     }else if(data.getData().toString().contains("video")){
                         postState = PostState.video;
+                        showOnlyVideoPreview();
                     }
                 }
                 break;
