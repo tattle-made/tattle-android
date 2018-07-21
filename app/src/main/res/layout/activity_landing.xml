@@ -119,7 +119,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/quadruple_margin"
                 android:id="@+id/compound_submit_button">
-
             </studio.laboroflove.naarad.widgets.LoaderButton>
 
         </LinearLayout>

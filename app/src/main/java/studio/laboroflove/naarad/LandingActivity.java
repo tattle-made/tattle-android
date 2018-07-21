@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +22,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +49,7 @@ import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import studio.laboroflove.LocationUtil;
 import studio.laboroflove.naarad.utils.SimpleLocationUtil;
@@ -76,6 +80,14 @@ public class LandingActivity extends AppCompatActivity
     @BindView(R.id.compound_submit_button)
     LoaderButton compoundSubmitButton;
 
+    @OnCheckedChanged(R.id.form_location)
+    public void onSendLocationSelected(CompoundButton button, boolean checked){
+        if(checked){
+            lastKnownLocation = simpleLocationUtil.getLastKnownLocation();
+            Log.d(TAG, "location : " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
+        }
+    }
+
     private enum PostState {
         text,
         video,
@@ -87,6 +99,7 @@ public class LandingActivity extends AppCompatActivity
 
     //private LocationUtil locationUtil;
     private SimpleLocationUtil simpleLocationUtil;
+    private Location lastKnownLocation;
 
     @OnClick(R.id.upload_media)
     public void onClickUploadMedia(View v) {

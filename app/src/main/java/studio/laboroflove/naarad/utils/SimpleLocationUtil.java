@@ -25,6 +25,7 @@ public class SimpleLocationUtil {
 
     private void init(Context context){
         locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        getLastKnownLocation();
     }
 
     @SuppressWarnings({"ResourceType"})
@@ -33,7 +34,7 @@ public class SimpleLocationUtil {
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        lastKnownLocation = lastKnownLocation;
+                        lastKnownLocation = location;
                     }
                 });
         return lastKnownLocation;
