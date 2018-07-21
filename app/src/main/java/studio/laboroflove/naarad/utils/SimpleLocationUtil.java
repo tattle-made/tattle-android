@@ -13,6 +13,7 @@ public class SimpleLocationUtil {
     private static SimpleLocationUtil _instance;
     private FusedLocationProviderClient locationProviderClient;
     private Location lastKnownLocation;
+    private boolean hasLocation;
 
     public static SimpleLocationUtil getInstance(Context context){
         if(_instance==null){
@@ -35,8 +36,17 @@ public class SimpleLocationUtil {
                     @Override
                     public void onSuccess(Location location) {
                         lastKnownLocation = location;
+                        setHasLocation(lastKnownLocation==null?true:false);
                     }
                 });
         return lastKnownLocation;
+    }
+
+    public boolean hasLocation(){
+        return lastKnownLocation==null?false:true;
+    }
+
+    private void setHasLocation(boolean flag){
+        hasLocation = flag;
     }
 }

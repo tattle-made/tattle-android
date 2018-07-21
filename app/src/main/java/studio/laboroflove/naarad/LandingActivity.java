@@ -1,31 +1,21 @@
 package studio.laboroflove.naarad;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,14 +26,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -51,15 +40,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import studio.laboroflove.LocationUtil;
 import studio.laboroflove.naarad.utils.SimpleLocationUtil;
 import studio.laboroflove.naarad.widgets.LoaderButton;
 import studio.laboroflove.naarad.widgets.TagAdder;
 
 import static android.view.View.GONE;
 
-public class LandingActivity extends AppCompatActivity
-        implements LocationUtil.LocationAvailabilityListener {
+public class LandingActivity extends AppCompatActivity{
     private final String TAG = LandingActivity.class.getSimpleName();
 
     @BindView(R.id.clipboard_preview)
@@ -91,13 +78,13 @@ public class LandingActivity extends AppCompatActivity
     private enum PostState {
         text,
         video,
-        image
+        image,
+        none
     }
 
-    private PostState postState;
+    private PostState postState = PostState.none;
     private Uri currentFileUri;
 
-    //private LocationUtil locationUtil;
     private SimpleLocationUtil simpleLocationUtil;
     private Location lastKnownLocation;
 
@@ -150,18 +137,24 @@ public class LandingActivity extends AppCompatActivity
         }
         compoundSubmitButton.setInteractionListener(new LoaderButton.InteractionListener() {
             @Override
-            public void onClicked() {
-                Log.d(TAG, formDescription.getText().toString());
-                switch (postState){
-                    case text:
-                        uploadTextFile();
-                        break;
-                    case image:
-                        uploadImageFile(currentFileUri);
-                        break;
-                    case video:
-                        uploadVideoFile(currentFileUri);
-                        break;
+            public void onClicked(LoaderButton.InstructionListener instructionListener) {
+                if(postState == PostState.none){
+                    instructionListener.shouldProceed(false);
+                    Toast.makeText(getBaseContext(), "You have not selected any post", Toast.LENGTH_SHORT).show();
+                }else{
+                    instructionListener.shouldProceed(true);
+                    switch (postState){
+                        case text:
+                            uploadTextFile();
+                            break;
+                        case image:
+                            uploadImageFile(currentFileUri);
+                            break;
+                        case video:
+                            uploadVideoFile(currentFileUri);
+                            break;
+                    }
+                    postState = PostState.none;
                 }
             }
         });
@@ -171,20 +164,17 @@ public class LandingActivity extends AppCompatActivity
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        //locationUtil = LocationUtil.getInstance(getBaseContext(), this);
         return super.onCreateView(parent, name, context, attrs);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //locationUtil.startLocationUpdates(getBaseContext());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //locationUtil.stopLocationUpdates();
     }
 
     private void showOnlyImagePreview() {
@@ -267,6 +257,10 @@ public class LandingActivity extends AppCompatActivity
         post.put("tags", tagAdder.getTags());
         post.put("type", "text");
         post.put("filename", filename);
+        if(formLocation.isChecked() && simpleLocationUtil.hasLocation()){
+            post.put("location", new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
+        }
+
 
         db.collection("post")
             .add(post)
@@ -320,15 +314,5 @@ public class LandingActivity extends AppCompatActivity
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onLocationAvailable(boolean isAvailable) {
-        Log.d("location-test", "is available : "+isAvailable);
-    }
-
-    @Override
-    public void lastKnowLocation(Location location) {
-        Log.d("location-test", "last know location : "+location.getLatitude());
     }
 }

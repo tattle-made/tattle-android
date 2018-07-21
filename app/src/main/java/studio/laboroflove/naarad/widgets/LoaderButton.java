@@ -27,18 +27,30 @@ public class LoaderButton extends LinearLayout {
     }
 
     public interface InteractionListener{
-        public void onClicked();
+        public void onClicked(InstructionListener instructionListener);
     }
+
+    public interface InstructionListener{
+        public void shouldProceed(boolean flag);
+    }
+
+    private InstructionListener instructionListener = new InstructionListener() {
+        @Override
+        public void shouldProceed(boolean flag) {
+            if(flag){
+                progressBar.setVisibility(VISIBLE);
+                buttonLabel.setVisibility(GONE);
+                button.setClickable(false);
+            }
+        }
+    };
 
     private InteractionListener interactionListener;
 
     @OnClick(R.id.button)
     public void buttonClicked(View v){
         Log.d(TAG, "clicked");
-        progressBar.setVisibility(VISIBLE);
-        buttonLabel.setVisibility(GONE);
-        button.setClickable(false);
-        interactionListener.onClicked();
+        interactionListener.onClicked(instructionListener);
     }
 
     public LoaderButton(Context context) {

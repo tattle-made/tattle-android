@@ -6,12 +6,12 @@
     android:orientation="horizontal"
     android:gravity="center"
     android:clickable="true"
+    android:clipChildren="true"
     android:paddingRight="@dimen/quadruple_margin"
     android:paddingLeft="@dimen/quadruple_margin"
     android:paddingTop="@dimen/double_margin"
     android:paddingBottom="@dimen/double_margin"
     android:background="@drawable/button_simple"
-    android:elevation="@dimen/half_margin"
     android:animateLayoutChanges="true">
 
     <ProgressBar
@@ -20,8 +20,8 @@
         android:indeterminate="true"
         android:id="@+id/progress_bar"
         android:visibility="gone"
-        android:progressTint="@color/primaryColor"
-        android:indeterminateTint="@color/primaryColor"
+        android:progressTint="@color/black"
+        android:indeterminateTint="@color/black"
         android:layout_marginRight="@dimen/double_margin"/>
 
     <TextView android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
         android:id="@+id/button_label"
         android:textAllCaps="true"
         android:textSize="@dimen/double_margin"
-        android:textColor="@color/secondaryTextColor"
+        android:textColor="@color/white"
         android:text="Submit"/>
 
 </LinearLayout>
