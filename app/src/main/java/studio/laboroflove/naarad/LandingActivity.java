@@ -14,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -44,18 +47,14 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import studio.laboroflove.naarad.utils.SimpleLocationUtil;
+import studio.laboroflove.naarad.widgets.CompoundUploadWidget;
 import studio.laboroflove.naarad.widgets.LoaderButton;
 import studio.laboroflove.naarad.widgets.TagAdder;
 
 import static android.view.View.GONE;
 
-public class LandingActivity extends AppCompatActivity{
+public class LandingActivity extends AppCompatActivity implements  LandingActivityController.ControllerInterface{
     private final String TAG = LandingActivity.class.getSimpleName();
-
-    @BindView(R.id.clipboard_preview)
-    TextView clipboardPreview;
-    @BindView(R.id.compound_upload_widget)
-    LinearLayout compoundWidget;
 
     @BindView(R.id.form_title)
     TextInputEditText formTitle;
@@ -65,58 +64,17 @@ public class LandingActivity extends AppCompatActivity{
     TagAdder tagAdder;
     @BindView(R.id.form_location)
     CheckBox formLocation;
-    @BindView(R.id.image_preview)
-    ImageView imagePreview;
-    @BindView(R.id.video_preview)
-    VideoView videoPreview;
     @BindView(R.id.compound_submit_button)
     LoaderButton compoundSubmitButton;
 
+    @BindView(R.id.compound_upload_component) CompoundUploadWidget compoundUploadComponent;
+
+    LandingActivityController landingActivityController;
+
     @OnCheckedChanged(R.id.form_location)
     public void onSendLocationSelected(CompoundButton button, boolean checked){
-        if(checked){
-            lastKnownLocation = simpleLocationUtil.getLastKnownLocation();
-            Log.d(TAG, "location : " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
-        }
+        landingActivityController.locationEnabled(checked);
     }
-
-    private enum PostState {
-        text,
-        video,
-        image,
-        none
-    }
-
-    private PostState postState = PostState.none;
-    private Uri currentFileUri;
-
-    private SimpleLocationUtil simpleLocationUtil;
-    private Location lastKnownLocation;
-
-    @OnClick(R.id.upload_media)
-    public void onClickUploadMedia(View v) {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        galleryIntent.setType("image/* video/*");
-        startActivityForResult(galleryIntent, PICK_IMAGE);
-    }
-
-    @OnClick(R.id.paste_clipboard)
-    public void onPasteClipboard(View v) {
-        compoundWidget.setVisibility(GONE);
-        clipboardPreview.setVisibility(View.VISIBLE);
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        String clipboardText = clipboard.getPrimaryClip().getItemAt(0).coerceToText(getBaseContext()).toString();
-        clipboardPreview.setText(clipboardText);
-
-        postState = PostState.text;
-    }
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storeRef = storage.getReference();
-    StorageReference textFolderRef = storeRef.child("text-posts");
-    StorageReference imageFolderRef = storeRef.child("image-posts");
-    StorageReference videoFolderRef = storeRef.child("video-posts");
 
     private final int PICK_IMAGE = 200;
 
@@ -132,44 +90,58 @@ public class LandingActivity extends AppCompatActivity{
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("image/")) {
-                postState = PostState.image;
-                currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                showOnlyImagePreview();
+                compoundUploadComponent.imageSelected((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
             } else if (type.startsWith("video/")) {
-                postState = PostState.video;
-                currentFileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                compoundUploadComponent.videoSelected((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
             }
         }
+
         compoundSubmitButton.setInteractionListener(new LoaderButton.InteractionListener() {
             @Override
             public void onClicked(LoaderButton.InstructionListener instructionListener) {
-                if(postState == PostState.none){
-                    instructionListener.shouldProceed(false);
-                    Toast.makeText(getBaseContext(), "You have not selected any post", Toast.LENGTH_SHORT).show();
-                }else{
-                    instructionListener.shouldProceed(true);
-                    switch (postState){
-                        case text:
-                            uploadTextFile();
-                            break;
-                        case image:
-                            uploadImageFile(currentFileUri);
-                            break;
-                        case video:
-                            uploadVideoFile(currentFileUri);
-                            break;
-                    }
-                    postState = PostState.none;
+            if(compoundUploadComponent.getPostState() == CompoundUploadWidget.PostState.none){
+                instructionListener.shouldProceed(false);
+                Toast.makeText(getBaseContext(), "You have not selected any post", Toast.LENGTH_SHORT).show();
+            }else{
+                instructionListener.shouldProceed(true);
+                switch (compoundUploadComponent.getPostState()){
+                    case text:
+                        landingActivityController.uploadTextFile(compoundUploadComponent.getCurrentClipboardText());
+                        break;
+                    case image:
+                        landingActivityController.uploadImageFile(compoundUploadComponent.getCurrentFileUri());
+                        break;
+                    case video:
+                        landingActivityController.uploadVideoFile(compoundUploadComponent.getCurrentFileUri());
+                        break;
                 }
+            }
             }
         });
 
-        simpleLocationUtil = SimpleLocationUtil.getInstance(getBaseContext());
+        landingActivityController = new LandingActivityController(this);
 
-        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        compoundUploadComponent.setInteractionListener(new CompoundUploadWidget.CompoundUploadWidgetInteraction() {
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setVolume(0,0);
+            public void onPasteFromClipboardClicked() {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                String clipboardText = clipboard.getPrimaryClip().getItemAt(0).coerceToText(getBaseContext()).toString();
+                compoundUploadComponent.textSelected(clipboardText);
+            }
+
+            @Override
+            public void onUploadClicked() {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryIntent.setType("image/* video/*");
+                startActivityForResult(galleryIntent, PICK_IMAGE);
+            }
+
+            @Override
+            public void onClearSlate() {
+                formTitle.setText("");
+                formDescription.setText("");
+                tagAdder.clearTags();
+                formLocation.setChecked(false);
             }
         });
     }
@@ -189,136 +161,6 @@ public class LandingActivity extends AppCompatActivity{
         super.onStop();
     }
 
-    private void showOnlyImagePreview() {
-        imagePreview.setImageURI(currentFileUri);
-        imagePreview.setVisibility(View.VISIBLE);
-        clipboardPreview.setVisibility(GONE);
-        compoundWidget.setVisibility(GONE);
-        videoPreview.setVisibility(GONE);
-    }
-
-    private void showOnlyVideoPreview() {
-        videoPreview.setVideoURI(currentFileUri);
-        videoPreview.setVisibility(View.VISIBLE);
-        videoPreview.start();
-
-        clipboardPreview.setVisibility(GONE);
-        compoundWidget.setVisibility(GONE);
-        imagePreview.setVisibility(GONE);
-    }
-
-    public void uploadTextFile(){
-        try {
-            final String fileName = UUID.randomUUID().toString();
-            byte[] textPost = clipboardPreview.getText().toString().getBytes("UTF-8");
-            StorageReference newTextFile = textFolderRef.child(fileName);
-            UploadTask uploadTask = newTextFile.putBytes(textPost);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Log.d(TAG, "text uploaded");
-                    storePost(fileName);
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "text upload failed");
-                            Toast.makeText(getBaseContext(), "Error Uploading File. Try Again", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void uploadImageFile(Uri uri){
-        final String fileName = UUID.randomUUID().toString();
-        StorageReference newTextFile = imageFolderRef.child(fileName);
-        UploadTask uploadTask = newTextFile.putFile(uri);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "image uploaded");
-                storePost(fileName);
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "image upload failed");
-                        Toast.makeText(getBaseContext(), "Error Uploading File. Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    public void uploadVideoFile(Uri uri){
-        final String fileName = UUID.randomUUID().toString();
-        StorageReference newTextFile = videoFolderRef.child(fileName);
-        UploadTask uploadTask = newTextFile.putFile(uri);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "video uploaded");
-                storePost(fileName);
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "video upload failed");
-                        Toast.makeText(getBaseContext(), "Error Uploading File. Try Again", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void storePost(String filename){
-        Map<String, Object> post = new HashMap<>();
-        post.put("title", formTitle.getText().toString());
-        post.put("description", formDescription.getText().toString());
-
-        post.put("tags", tagAdder.getTags());
-        post.put("type", "text");
-        post.put("filename", filename);
-        if(formLocation.isChecked() && simpleLocationUtil.hasLocation()){
-            post.put("location", new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
-        }
-
-
-        db.collection("post")
-            .add(post)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Log.d(TAG, "success uploading post");
-                    Toast.makeText(getBaseContext(), "Post Saved. Thank you!", Toast.LENGTH_SHORT).show();
-                    compoundSubmitButton.onComplete();
-                    clearSlate();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "failure uploading post");
-                    Toast.makeText(getBaseContext(), "Error Stroing Post in database. Try Again", Toast.LENGTH_SHORT).show();
-                }
-            });
-    };
-
-    private void clearSlate(){
-        formTitle.setText("");
-        formDescription.setText("");
-        tagAdder.clearTags();
-        formLocation.setChecked(false);
-        clipboardPreview.setText("");
-        clipboardPreview.setVisibility(GONE);
-        compoundWidget.setVisibility(View.VISIBLE);
-        imagePreview.setVisibility(GONE);
-        imagePreview.setImageURI(null);
-        videoPreview.setVideoURI(null);
-        videoPreview.setVisibility(GONE);
-    }
-
     public static void startMe(OnboardingActivity onboardingActivity){
         Intent intent = new Intent(onboardingActivity, LandingActivity.class);
         onboardingActivity.startActivity(intent);
@@ -330,16 +172,53 @@ public class LandingActivity extends AppCompatActivity{
         switch (requestCode){
             case PICK_IMAGE :
                 if(resultCode==RESULT_OK){
-                    currentFileUri = data.getData();
                     if(data.getData().toString().contains("image")){
-                        postState = PostState.image;
-                        showOnlyImagePreview();
+                        compoundUploadComponent.imageSelected(data.getData());
                     }else if(data.getData().toString().contains("video")){
-                        postState = PostState.video;
-                        showOnlyVideoPreview();
+                        compoundUploadComponent.videoSelected(data.getData());
                     }
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_about:
+                AboutActivity.startMe(LandingActivity.this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Context getContext() {
+        return getBaseContext();
+    }
+
+    public Map<String, Object> getFormData(){
+        Map<String, Object> formData = new HashMap<>();
+
+        formData.put("title", formTitle.getText().toString());
+        formData.put("description", formDescription.getText().toString());
+        formData.put("tags", tagAdder.getTags());
+        formData.put("type", compoundUploadComponent.getPostState().name());
+        formData.put("isLocationChecked", landingActivityController.isLocationEnabled());
+
+        return formData;
+    }
+
+    @Override
+    public void onPostSubmitted() {
+        compoundSubmitButton.onComplete();
+        compoundUploadComponent.clearSlate();
     }
 }

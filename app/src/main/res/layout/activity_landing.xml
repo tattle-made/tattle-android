@@ -12,57 +12,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-        <FrameLayout android:layout_width="match_parent"
+        <studio.laboroflove.naarad.widgets.CompoundUploadWidget
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/quadruple_margin"
-            android:background="@color/primaryLightColorTranscluscent">
+            android:id="@+id/compound_upload_component"
+            >
 
-            <TextView android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:id="@+id/clipboard_preview"
-                android:ellipsize="end"
-                android:visibility="gone"
-                android:textColor="@color/secondaryTextColor"
-                android:text="dummy"/>
-
-            <ImageView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:id="@+id/image_preview"
-                android:visibility="gone"/>
-
-            <VideoView android:layout_width="160dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center_horizontal"
-                android:visibility="gone"
-                android:adjustViewBounds="true"
-                android:id="@+id/video_preview"
-                />
-
-            <LinearLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/compound_upload_widget"
-                android:orientation="vertical">
-
-                <Button android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/paste_clipboard"
-                    android:text="Paste text from clipboard"/>
-
-                <TextView android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="or"
-                    android:textColor="@android:color/black"
-                    android:layout_gravity="center_horizontal"/>
-
-                <Button android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/upload_media"
-                    android:text="Upload video or Image"/>
-
-            </LinearLayout>
-        </FrameLayout>
+        </studio.laboroflove.naarad.widgets.CompoundUploadWidget>
 
         <LinearLayout
             android:layout_width="match_parent"

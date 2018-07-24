@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/quadruple_margin"
+    android:background="@color/primaryLightColorTranscluscent">
+
+    <TextView android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:id="@+id/clipboard_preview"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:visibility="gone"
+        android:textColor="@color/secondaryTextColor"
+        android:text="dummy"/>
+
+    <ImageView android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:id="@+id/image_preview"
+        android:visibility="gone"/>
+
+    <VideoView android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:adjustViewBounds="true"
+        android:id="@+id/video_preview"
+        />
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/compound_upload_widget"
+        android:orientation="vertical">
+
+        <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/paste_clipboard"
+            android:textAllCaps="false"
+            android:text="Paste text from clipboard"/>
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="or"
+            android:textColor="@android:color/black"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upload_media"
+            android:textAllCaps="false"
+            android:text="Upload video or Image"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_undo"
+        android:visibility="gone"
+        android:layout_gravity="end"
+        android:background="?android:selectableItemBackground"
+        app:srcCompat="@drawable/ic_undo"/>
+</FrameLayout>

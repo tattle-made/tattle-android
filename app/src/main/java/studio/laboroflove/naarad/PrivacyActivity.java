@@ -1,5 +1,6 @@
 package studio.laboroflove.naarad;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ public class PrivacyActivity extends AppCompatActivity {
         hostActivity.startActivity(intent);
     }
 
+    @TargetApi(21)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
