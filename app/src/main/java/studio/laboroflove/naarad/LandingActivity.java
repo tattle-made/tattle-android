@@ -138,10 +138,7 @@ public class LandingActivity extends AppCompatActivity implements  LandingActivi
 
             @Override
             public void onClearSlate() {
-                formTitle.setText("");
-                formDescription.setText("");
-                tagAdder.clearTags();
-                formLocation.setChecked(false);
+                clearForm();
             }
         });
     }
@@ -218,7 +215,15 @@ public class LandingActivity extends AppCompatActivity implements  LandingActivi
 
     @Override
     public void onPostSubmitted() {
+        clearForm();
         compoundSubmitButton.onComplete();
         compoundUploadComponent.clearSlate();
+    }
+
+    private void clearForm(){
+        formTitle.setText("");
+        formDescription.setText("");
+        tagAdder.clearTags();
+        formLocation.setChecked(false);
     }
 }

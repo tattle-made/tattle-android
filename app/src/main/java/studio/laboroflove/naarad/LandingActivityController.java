@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -17,6 +18,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +121,7 @@ public class LandingActivityController {
     private void storePost(String filename){
         Map<String, Object> post = controllerInterface.getFormData();
         post.put("filename", filename);
+        post.put("timestamp", new Timestamp(new Date()));
 
         if((boolean)post.get("isLocationChecked")==true && simpleLocationUtil.hasLocation()){
             post.put("location", new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
