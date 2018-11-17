@@ -22,7 +22,7 @@
             android:background="@color/primaryColor" />
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Naarad"
+            android:text="@string/app_name"
             android:textSize="@dimen/double_margin"
             android:layout_marginLeft="@dimen/double_margin"
             android:layout_gravity="center_vertical"/>
@@ -38,12 +38,13 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@color/primaryColor" />
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            app:srcCompat="@drawable/ic_onboardingasset"
+            />
         <TextView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send content you receive on whatsapp to us. Help us create the biggest open API to study thriving content ecosystem on Whatsapp."
+            android:text="Send forwards you receive on Whatsapp to us \nHelp us create an open dataset to assist the reserach of a thriving content ecosystem on Whatsapp."
             android:textSize="@dimen/double_margin"
             android:layout_marginTop="@dimen/double_margin"
             android:layout_gravity="center"/>

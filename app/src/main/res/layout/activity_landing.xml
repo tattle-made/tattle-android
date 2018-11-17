@@ -12,13 +12,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
-        <studio.laboroflove.naarad.widgets.CompoundUploadWidget
+        <studio.laboroflove.tattle.widgets.CompoundUploadWidget
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/compound_upload_component"
             >
 
-        </studio.laboroflove.naarad.widgets.CompoundUploadWidget>
+        </studio.laboroflove.tattle.widgets.CompoundUploadWidget>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,12 +63,12 @@
                     android:maxLines="1"/>
             </android.support.design.widget.TextInputLayout>
 
-            <studio.laboroflove.naarad.widgets.TagAdder
+            <studio.laboroflove.tattle.widgets.TagAdder
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tagadder_tags">
 
-            </studio.laboroflove.naarad.widgets.TagAdder>
+            </studio.laboroflove.tattle.widgets.TagAdder>
 
             <CheckBox android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,12 +77,12 @@
                 android:hint="Send Location"/>
 
 
-            <studio.laboroflove.naarad.widgets.LoaderButton
+            <studio.laboroflove.tattle.widgets.LoaderButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/quadruple_margin"
                 android:id="@+id/compound_submit_button">
-            </studio.laboroflove.naarad.widgets.LoaderButton>
+            </studio.laboroflove.tattle.widgets.LoaderButton>
 
         </LinearLayout>
 

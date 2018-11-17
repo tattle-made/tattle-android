@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Naarad</string>
+    <string name="app_name">Tattle</string>
+    <string name="about_activity_title">About Tattle</string>
 </resources>
