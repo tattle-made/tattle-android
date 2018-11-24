@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/newSubmissionFragment">
+
+    <fragment
+        android:id="@+id/newSubmissionFragment"
+        android:name="studio.laboroflove.tattle.features.new_submission.NewSubmissionFragment"
+        android:label="NewSubmissionFragment" >
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_announcementFragment4"
+            app:destination="@id/announcementFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_enter_anim" app:popExitAnim="@anim/nav_default_exit_anim" app:launchSingleTop="true"/>
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_submissionsFragment"
+            app:destination="@id/submissionsFragment" />
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_feedbackFragment"
+            app:destination="@id/feedbackFragment" />
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
+        <action
+            android:id="@+id/action_newSubmissionFragment_to_shareAppFragment"
+            app:destination="@id/shareAppFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/announcementFragment"
+        android:name="studio.laboroflove.tattle.features.announcements.AnnouncementFragment"
+        android:label="AnnouncementFragment" />
+    <fragment
+        android:id="@+id/submissionsFragment"
+        android:name="studio.laboroflove.tattle.features.submissions.SubmissionsFragment"
+        android:label="SubmissionsFragment" >
+        <action
+            android:id="@+id/action_submissionsFragment_to_submissionFragment"
+            app:destination="@id/submissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="studio.laboroflove.tattle.features.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="studio.laboroflove.tattle.features.feedback.FeedbackFragment"
+        android:label="FeedbackFragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="studio.laboroflove.tattle.features.about.AboutFragment"
+        android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="studio.laboroflove.tattle.features.privacy_policy.PrivacyPolicyFragment"
+        android:label="PrivacyPolicyFragment" />
+    <fragment
+        android:id="@+id/shareAppFragment"
+        android:name="studio.laboroflove.tattle.features.share_app.ShareAppFragment"
+        android:label="ShareAppFragment" />
+    <fragment
+        android:id="@+id/submissionFragment"
+        android:name="studio.laboroflove.tattle.features.submissions.SubmissionFragment"
+        android:label="SubmissionFragment" />
+</navigation>

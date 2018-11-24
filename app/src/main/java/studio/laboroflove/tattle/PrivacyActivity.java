@@ -40,7 +40,6 @@ public class PrivacyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Spannable text = new SpannableStringBuilder()
-//                .append("PrivacyActivity Policy for Beta Version\n\n")
                 .append("About Tattle:\n", new StyleSpan(BOLD), Spannable.SPAN_INTERMEDIATE)
                 .append("Tattle is an app for anonymously crowdsourcing, and annotating messages forwarded on WhatsApp from WhatsApp users.\n\n")
                 .append("What Tattle Collects About You?\n", new StyleSpan(BOLD), Spannable.SPAN_INTERMEDIATE)

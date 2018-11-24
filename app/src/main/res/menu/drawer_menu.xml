@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/submit"
+            android:icon="@drawable/ic_submit_new"
+            android:title="Submit New"></item>
+
+        <item
+            android:id="@+id/submissions"
+            android:icon="@drawable/ic_submissions"
+            android:title="Previous Submissions"></item>
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:visible="false"
+            android:title="Settings"></item>
+
+        <item
+            android:id="@+id/announcements"
+            android:icon="@drawable/ic_announcements"
+            android:title="Announcements"></item>
+
+        <item
+            android:id="@+id/feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="Feedback"></item>
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/content_section">
+
+        <item
+            android:id="@+id/privacy_policy"
+            android:icon="@drawable/ic_privacy_policy"
+            android:title="Privacy Policy"></item>
+
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_about"
+            android:title="About"></item>
+
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_share"
+            android:visible="false"
+            android:title="Share App"></item>
+    </group>
+</menu>
