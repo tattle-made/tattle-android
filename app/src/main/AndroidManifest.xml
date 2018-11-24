@@ -13,27 +13,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LandingActivity"
+        <activity
+            android:name=".LandingActivity"
             android:label="Tattle">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".OnboardingActivity"
+        <activity
+            android:name=".OnboardingActivity"
             android:label="Tattle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".FeedActivity" />
         <activity android:name=".AboutActivity" />
-        <activity android:name=".PrivacyActivity">
+        <activity android:name=".PrivacyActivity"></activity>
+        <activity android:name="studio.laboroflove.TestActivity">
 
         </activity>
     </application>
